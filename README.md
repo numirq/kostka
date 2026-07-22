@@ -2,6 +2,10 @@
 
 Timer do kostki 3×3 dla dwóch znajomych. Ma ekran profili inspirowany Netflixem, zmianę profilu, automatyczne scramble, PB, ao5, ao12 i bezpośrednie porównanie wyników.
 
+## Wersja online
+
+[Otwórz Duo Timer](https://numirq.github.io/kostka/)
+
 ## Uruchomienie na komputerze
 
 Wymagany jest Node.js 22.
