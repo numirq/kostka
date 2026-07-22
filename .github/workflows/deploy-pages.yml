@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: 22
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Ustal adres projektu
         shell: bash
         run: |
