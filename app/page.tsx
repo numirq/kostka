@@ -214,9 +214,10 @@ export default function Home() {
   const rival = profiles.find((profile) => profile.id !== activeProfile?.id);
   const activeStats = useMemo(() => stats(activeProfile), [activeProfile]);
   const rivalStats = useMemo(() => stats(rival), [rival]);
+  const activeTimerProfileId = activeProfile?.id;
 
   const stopTimer = useCallback(() => {
-    if (timerState !== "running") return;
+    if (timerState !== "running" || !activeTimerProfileId) return;
     const elapsed = (performance.now() - startTimeRef.current) / 1000;
     const finalTime = Math.max(0.001, Math.round(elapsed * 1000) / 1000);
     setDisplayTime(finalTime);
@@ -224,13 +225,13 @@ export default function Home() {
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
     setProfiles((current) =>
       current.map((profile) =>
-        profile.id === activeProfile.id
+        profile.id === activeTimerProfileId
           ? { ...profile, solves: [...profile.solves, { id: generateId(), time: finalTime, createdAt: Date.now() }] }
           : profile,
       ),
     );
     setScramble(createScramble());
-  }, [activeProfile.id, timerState]);
+  }, [activeTimerProfileId, timerState]);
 
   const startTimer = useCallback(() => {
     startTimeRef.current = performance.now();
@@ -295,6 +296,7 @@ export default function Home() {
   }
 
   function deleteLastSolve() {
+    if (!activeProfile) return;
     const removed = activeProfile.solves.at(-1);
     setProfiles((current) => current.map((profile) => profile.id === activeProfile.id ? { ...profile, solves: profile.solves.slice(0, -1) } : profile));
     if (removed && supabase && REMOTE_ROOM) {
@@ -302,7 +304,7 @@ export default function Home() {
     }
   }
 
-  if (profilesOpen) {
+  if (profilesOpen || !activeProfile) {
     return (
       <main className="profiles-screen">
         <div className="profiles-brand"><span className="cube-mark"><i /><i /><i /><i /></span> DUO TIMER</div>
