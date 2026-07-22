@@ -23,6 +23,9 @@ create index if not exists solves_profile_id_idx on public.solves(profile_id);
 alter table public.profiles enable row level security;
 alter table public.solves enable row level security;
 
+grant select, insert, update, delete on public.profiles to authenticated;
+grant select, insert, update, delete on public.solves to authenticated;
+
 drop policy if exists "Room members can read profiles" on public.profiles;
 drop policy if exists "Room members can create profiles" on public.profiles;
 drop policy if exists "Room members can update profiles" on public.profiles;
